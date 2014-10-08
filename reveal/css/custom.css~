@@ -1,0 +1,8 @@
+.reveal code {
+  color: #13daec;
+  font-weight: bold;
+}
+
+.reveal pre code {
+  color: white;
+}
