@@ -9,16 +9,15 @@ Consultant [@ZenikaIT](http://zenika.com/)
 ## Agenda
 
 1. Dart, a quick tour
+1. Angular
 1. AngularDart
 1. What's in the future?
 
 
 
-## Dart
 <figure>
   <img src="img/dart.png" />
 </figure>
-
 
 
 ## What ?
@@ -31,13 +30,11 @@ Consultant [@ZenikaIT](http://zenika.com/)
 * Developped and supported by `Google`
 
 
-
 ## Why ? 
 
 <figure>
    <img src="img/no_javascript.gif"/>
 </figure>
-
 
 
 ## Dart goals
@@ -49,16 +46,12 @@ Consultant [@ZenikaIT](http://zenika.com/)
 * Easy to learn
 * High productivity & [performances](https://www.youtube.com/watch?v=FqsU3TbUw_s)
 
-
-
-Dart targets the `modern` web
 <figure>
    <img src="img/browsers.png"/>
 </figure>
 
 
-
-## Dart is familiar
+## It is familiar
 
 ```Dart
 @Injectable
@@ -75,15 +68,13 @@ class Conference {
 ```
 
 
-
-## Dart is not JavaScript
+## But it is not JavaScript
 
 No `undefined` just `null`
 
 Only `true` is truthy
 
 Real lexical scoping
-
 
 
 ## "Callback Hell" aka "Pyramid of Doom"
@@ -107,8 +98,7 @@ myapp.asyncOperation1(function(firstData) {
 ```
 
 
-
-## Dart's Future are great
+## Native Future are great
 
 ```Dart
 asyncOp1()
@@ -119,18 +109,72 @@ asyncOp1()
 ```
 
 
+## Many other great things
+
+* Isolates
+* Deferred loading
+* Tree shaking
+
+
 
 <figure>
 	<img src="img/angular.png" />
 </figure>
 
 
-
 ## Angular
 
 * Created in 2009
+* First stable release 2012
 * Developped and supported by `Google`
-* Ported to Dart in 2014
+* One fact : `all the webapps are the same`
+* One aim : enable `webdesigners` to build webapp
+
+
+## 2-way binding
+<figure>
+  <img src="img/two-way-binding.png" />
+</figure>
+
+
+## Imperative programming is hard to follow
+Some imperative programming : 
+```Html
+<div id="mydiv">
+ <h1>Foo</h4>
+ <div>Bar</div>
+</div>
+```
+With the following lines hidden among 20 000 lines of JS :
+```JavaScript
+$('#mydiv').on('click', function() {
+  console.log('foo');
+});
+```
+
+
+## Declarative programming is better
+Some declarative HTML : 
+```Html
+<div ng-click="log()">
+ <h1>Foo</h4>
+ <div>Bar</div>
+</div>
+```
+And the corresponding JS function : 
+```JavaScript
+function log() {
+  console.log('foo');
+}
+```
+
+
+<figure>
+  <img src="img/google_feedback.png" />
+</figure>
+
+
+## Angular has been ported to Dart!
 
 
 
@@ -139,17 +183,179 @@ asyncOp1()
 </figure>
 
 
-
 ## Context
-* Rewriting of Google sales force automation tool
-* Team : Green tea - X engineers
-* Legacy : Java / GWT application
-* Decisions made : use Dart and port Angular
 
+* `Rewriting` of Google internal CRM
+* Project defined as "`widow maker project`" by Seth Ladd
+* Team : Green tea - 12 engineers
+* Legacy : Java / GWT application
+* Decisions made : 
+ * rewrite `completely` the tool
+ * port `Angular` to `Dart`
+ 
+=> CRM rewritten in 6 months
 
 
 ## How ?
-* Porting the `test harness` and make it pass 
-* With help :
+* Porting the `test harness` and make it pass
+* Not alone, they had help :
  * Angular core team
  * Dart core team
+ 
+
+
+## More than a port !
+
+* `Fully` rewritten
+* All the standard features
+ * Directives
+ * Decorators / Components
+ * Formatters
+* Plus some `Dartisms`
+
+
+## Dartisms ?
+
+* Type based [DI](http://www.youtube.com/watch?v=_OGGsf1ZXMs) (Vojta Jina's talk at ngConf)
+* `Annotations` 
+ * Add meta information to existing class
+ * Standardization of declaration 
+   * Controller, Component, Formatter ...
+* `Web standards` : 
+ * Web components => Shadow DOM
+* [Zones](http://www.youtube.com/watch?v=3IqtmUscE_U) (Brian Ford's talk at ngConf)
+* Uniformi
+
+
+## Zone ? What's that beast ?
+
+A zone is a "dynamic extent `including asynchronous callbacks` declared in the zone" which means an execution context.
+<figure>
+  <img src="img/zones.png"/>  
+</figure> 
+
+`No more` : $scope.$apply()
+
+
+## Bootstrapping an application
+
+Include dart file and declare your Angular application : 
+ 
+```HTML
+<html ng-app>
+  <!-- scripts should be declared normally -->
+  <!-- script:  src="packages/shadow_dom/shadow_dom.min.js"-->
+  <!-- script:  type="application/dart" src="addressbook.dart"-->
+  <!-- script:  src="packages/browser/dart.js"-->
+</html>
+```
+
+
+## Bootstrapping an application
+
+```Dart
+main() {
+  applicationFactory()
+      ..addModule(
+        new Module()
+          ..bind(ContactList)
+          ..bind(Contacts)
+        )
+      ..run();
+}
+```
+
+
+## Controllers
+
+Declaring a controller : 
+```Dart
+@Controller(selector: '[contact-list]', publishAs: 'contactList')
+class ContactList {
+  List<Contact> contacts = [ new Contact(...), new Contact(...)];
+}
+```
+Using it in a template : 
+```Html
+<div class="row" contact-list>
+  <li ng-repeat="contact in contactList.contacts">
+    <a href="">
+    {{contact.firstName}} {{contact.lastName}}
+    </a>
+  </li>
+</div>
+```
+
+
+## Services
+
+Creating a service : 
+```Dart
+@Injectable()
+class Contacts {
+  List<Contact> contacts = [ new Contact(...), new Contact(...)];
+}
+```
+Use it through DI : 
+```Dart
+@Controller(selector: '[contact-list]', publishAs: 'contactList')
+class ContactList {
+  Contacts contactsSvc;
+  List<Contact> contacts;
+
+  ContactList(this.contactsSvc) {
+    contacts = contactsSvc.contacts;
+  }
+}
+```
+
+
+## Directives
+
+* Directives have been splitted into : 
+ * Decorator
+   * Add behaviour to existing HTML element
+ * Component
+   * Create custom HTML element
+   * Subset of web components
+
+
+## Components
+Declare the VCard : 
+```Dart
+@Component(
+    selector: 'vcard',
+    publishAs: 'vcard',
+    templateUrl: 'packages/angulardart_flight_school/components/vcard/vcard_component.html',
+    cssUrl: 'packages/angulardart_flight_school/components/vcard/vcard_component.css'
+
+)
+class VCard {
+  @NgTwoWay('contact')
+  Contact contact;
+}
+```
+Use your component : 
+```Html
+<vcard contact="contact" class="span4" ng-repeat="contact in contactList.contacts"></vcard>
+``` 
+
+
+## Components
+The template looks like : 
+```Html
+ <div class="contact-card">
+    <div class="contact-card-inner">
+        <h4>
+          {{vcard.contact.firstName}} {{vcard.contact.lastName | uppercase}}
+        </h4>
+
+        <div class="contact-address">{{vcard.contact.address}}</div>
+        <div class="contact-phone">{{vcard.contact.phone}}</div>
+    </div>
+</div>
+```
+Web components are awesome : 
+
+* Already available through Polymer
+* No more CSS leak
