@@ -357,5 +357,159 @@ The template looks like :
 ```
 Web components are awesome : 
 
-* Already available through Polymer
-* No more CSS leak
+* Already available through `Polymer`
+* No more `CSS leak`
+
+
+## Decorators
+Customize existing HTML : 
+```Dart
+@Decorator(selector: '[tooltip]')
+class Tooltip {
+  Element _elm;
+  
+  @NgOneWay('tooltip')
+  Contact tooltip;
+
+  Tooltip(this._elm) {
+    this._elm.onMouseEnter.listen((MouseEvent e) {
+      DivElement div = new Element
+        .html("<div id='tooltip'>${tooltip.address} - ${tooltip.phone}</div>");
+      div.style
+        ..position = 'absolute'
+        ..left = '${e.page.x + 10}px'
+        ..top = '${e.page.y + 10}px'
+        ..padding = '5px'
+        ..borderRadius = '5px'
+        ..backgroundColor = 'white'
+        ..border = 'solid 1px black';
+      document.body.append(div);
+    });
+    this._elm.onMouseLeave.listen((MouseEvent e) {
+      var tooltip = document.querySelector('#tooltip');
+      if (tooltip != null) {
+        tooltip.remove();
+      }
+    });
+  }
+}
+```
+
+
+## Filters aka Formatters
+
+Filters were meant to `format data` for display
+
+Declare them is easy : 
+```Dart
+@Formatter(name: "doSearch")
+class SearchFilter {
+  List<Contact> call(List<Contact> contacts, String search) {
+    if (search == null) {
+      return contacts;
+    }
+    return contacts.where(
+        (Contact c) => (
+            c.firstName.toLowerCase().contains(search.toLowerCase()) ||
+            c.lastName.toLowerCase().contains(search.toLowerCase()))
+        ).toList();
+  }
+}
+```
+
+&#9888; No `selector` but a `name`
+
+&#9888; The method must be named `call`
+
+
+## Routing is powerful
+
+Similar to `ui-router` : 
+```Dart
+void addressBookRouter(Router router, RouteViewFactory views) {
+  views.configure({
+    'list': ngRoute(
+      path: '/list',
+      view: 'partials/list.html',
+      defaultRoute : true),
+    'contact': ngRoute(
+          path: '/contact/:id',
+          mount: {
+            'edit': ngRoute(
+                path: '/edit',
+                view: 'partials/edit.html'
+            ),
+            'view': ngRoute(
+                path: '/view',
+                view: 'partials/view.html'
+            )
+          })
+  });
+}
+```
+
+
+
+<figure>
+  <img src="img/future.jpg" />
+</figure>
+
+
+## Angular.dart
+
+* Version 1.0 is a `WIP`
+ * Some features to deliver
+ * Some to clean up / remove
+* Used by `Google` and `Netflix` in production
+
+
+## Angular two
+
+* Written in ES6
+* Many learnings from AngularDart backported
+ * Type based DI
+ * Annotations ? 
+ * Zones
+ * Dirty checking
+
+
+`AngularDart` is not about `Dart`.
+
+Such as `AngularJS` is not about `JS`. 
+
+It is all about making the web a better development platform.
+
+
+
+## Questions? 
+
+
+
+## Appendix : EcmaScript 6
+
+* Classes
+* Modules
+* Inheritance
+* Annotations ? (Not yet standardized)
+
+* Available today through [traceur](https://code.google.com/p/traceur-compiler/)
+
+
+## Appendix : EcmaScript 6
+
+Some ES6 code : 
+
+```
+import {
+  ChangeDetector
+} from './change_detection.js';
+
+export class DirtyCheckingChangeDetectorGroup extends ChangeDetector {
+  constructor(parent, cache) {
+    this._parent = parent;
+    this._getterCache = cache;
+  }
+  watch(context, field, handler) { ... }
+}
+```
+Looks familiar no ? 
