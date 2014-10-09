@@ -119,3 +119,37 @@ asyncOp1()
 ```
 
 
+
+<figure>
+	<img src="img/angular.png" />
+</figure>
+
+
+
+## Angular
+
+* Created in 2009
+* Developped and supported by `Google`
+* Ported to Dart in 2014
+
+
+
+<figure>
+	<img src="img/angulardart.png"/>
+</figure>
+
+
+
+## Context
+* Rewriting of Google sales force automation tool
+* Team : Green tea - X engineers
+* Legacy : Java / GWT application
+* Decisions made : use Dart and port Angular
+
+
+
+## How ?
+* Porting the `test harness` and make it pass 
+* With help :
+ * Angular core team
+ * Dart core team
