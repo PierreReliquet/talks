@@ -57,7 +57,7 @@ Tout développeur ayant utilisé AngularJS sait qu'une partie de la puissance d'
 Cependant, la DI de la version JavaScript présente un inconvénient majeur, elle est basé sur des chaînes de caractères et peut donc poser de nombreux problèmes lors des étapes de minifications aujourd'hui répandues pour la distribution d'une application web.
 Le nouveau né de la famille Angular ne reproduira pas l'erreur de son parent et se base désormais sur les types pour l'injection de dépendances.
 
-En reprenant le service précédemment déclaré, on peut facilement l'injecter dans le constructeur pour le rendre accessible : 
+En reprenant le service précédemment déclaré, on peut facilement l'injecter dans le constructeur pour le rendre accessible et ainsi récupérer la liste des contacts: 
 ```Dart
 @Component(...)
 class VCardList  {
@@ -70,4 +70,72 @@ class VCardList  {
 }
 
 ```
+
+### Au revoir Directives, Controllers et bienvenu Decorators, Components
+
+Au sein d'AngularJS, il y a une franche séparation entre : 
+
+* La manipulation du DOM assurée par les `directives`
+* La logique de l'application assurée par les `controllers`
+
+Le premier groupe a connaissance du DOM et est garant de son comportement alors que le second groupe ne doit surtout pas en être conscient, il manipule des données qui seront rendues via le mécanismes de 2-way binding.
+
+Cependant dans l'écosystème AngularDart, les contrôleurs disparaissent et les directives sont scindées en deux sous-catégories: 
+
+* Les `decorators` dont le rôle est d'enrichir les éléments existant en leur ajoutant du comportement. Ces éléments existants peuvent soit faire partie de la norme HTML, soit être des `components` externes.
+* Les `components` qui ne sont rien de moins qu'un sous-ensemble des web-components et dont le rôle est de permettre d'étendre le HTML afin de lui ajouter nos propres balises.
+
+La disparition des contrôleurs, quant à elle, correspond au rapprochement avec les web-components. Désormais les expressions sont évalués dans le contexte du `Component` englobant.
+
+#### Decorators
+
+La syntaxe des `decorators` est une nouvelle fois basée sur les annotations et la déclaration d'un tooltip customisé pourrait se faire de la façon suivante : 
+
+```Dart
+@Decorator(selector: '[tooltip]')
+class Tooltip {
+  
+  Element _elm; // DOM element injected
+  
+  @NgOneWay('tooltip')
+  Contact tooltip; // One way binding of the contact
+  
+  Tooltip(this._elm) {
+    this._elm.onMouseEnter.listen((MouseEvent e) {
+      // Using string interpolation to ease the writing
+      DivElement div = new Element.html("<div id='tooltip'>${tooltip.address} - ${tooltip.phone}</div>");
+      
+      // Using the Dart method cascades to avoid repeating div.style.
+      div.style
+        ..position = 'absolute'
+        ..left = '${e.page.x + 10}px'
+        ..top = '${e.page.y + 10}px'
+        ..padding = '5px'
+        ..borderRadius = '5px'
+        ..backgroundColor = 'white'
+        ..border = 'solid 1px black';
+      document.body.append(div);
+    });
+    
+    this._elm.onMouseLeave.listen((MouseEvent e) {
+      var tooltip = document.querySelector('#tooltip');
+      if (tooltip != null) {
+        tooltip.remove();
+      }
+    });
+    
+    window.onHashChange.listen((e) {
+      var tooltip = document.querySelector('#tooltip');
+      if (tooltip != null) {
+        tooltip.remove();
+      }
+    });
+  }
+}
+```
+On peut donc constater : 
+* qu'un décorateur est, avant tout, une classe annotée avec la meta-information `@Decorator`
+* qu'un décorateur est aussi caractérisé par un attribut `selector` qui est un sélecteur CSS indiquant la condition d'activation de celui-ci, dans notre cas nous indiquons que le tooltip sera actif pour tous les éléments possédant l'attribut `tooltip`. 
+* qu'il est possible de récupérer des variables du scope englobant via des annotations `@NgOneWay`, `@NgTwoWay` ou encore par l'attribut [map](https://docs.angulardart.org/#angular/angular-core-annotation.Directive@id_map) de la meta-information `@Decorator`.
+
 
