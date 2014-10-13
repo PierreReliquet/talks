@@ -138,4 +138,26 @@ On peut donc constater :
 * qu'un décorateur est aussi caractérisé par un attribut `selector` qui est un sélecteur CSS indiquant la condition d'activation de celui-ci, dans notre cas nous indiquons que le tooltip sera actif pour tous les éléments possédant l'attribut `tooltip`. 
 * qu'il est possible de récupérer des variables du scope englobant via des annotations `@NgOneWay`, `@NgTwoWay` ou encore par l'attribut [map](https://docs.angulardart.org/#angular/angular-core-annotation.Directive@id_map) de la meta-information `@Decorator`.
 
+### Plus de Filters mais des Formatters
 
+Pourquoi tout renommer ? 
+
+D'après la documentation officiel d'AngularJS, un filtre sert à formatter le résultat d'une expression à des fins d'affichages (["A filter formats the value of an expression for display to the user"](https://docs.angularjs.org/guide/filter)). Cette définition pour le moins explicite permet de comprendre la raison de ce renommage de `Filter` à `Formatter`. La collision de nommage entre les `filters` et le filtre `filter` peut éventuellement être vu comme une autre raison permettant d'expliquer cette décision.
+
+La déclaration d'un formatter se fait par l'utilisation d'un "callable object" déclaré de la manière suivante : 
+```Dart
+@Formatter(name: "doSearch")
+class SearchFilter {
+  List<Contact> call(List<Contact> contacts, String search) {
+    if (search == null) {
+      return contacts;
+    }
+    return contacts.where(
+        (Contact c) => (
+            c.firstName.toLowerCase().contains(search.toLowerCase()) ||
+            c.lastName.toLowerCase().contains(search.toLowerCase()))
+        ).toList();
+  }
+}
+```
+On peut ainsi noter que contrairement aux décorateurs et composants la déclaration d'un formatter n'utilise pas de `selector` mais un `name` car le formatter n'a pas vocation à apparaître dans l'arbre DOM pour activer un quelconque comportement. Le `Formatter` est une fonction qui sera appelée pour formatter des données lors de l'affichage.
