@@ -27,4 +27,47 @@ Si je devais résumer AngularDart en une phrase cela serait :
 “Un framework regroupant toute la puissance et la philosophie d’Angular, les derniers standards web et codé avec un *
 langage moderne et structuré fonctionnant sur une VM offrant d’intéressantes possibilités”.
 
+En réalité AngularDart n'est un simple portage mais une `réécriture complète` d'AngularJS dont la méthodologie choisi est la suivante : 
+
+1. Réécrire tous les tests d'AngularJS en Dart
+2. Réécrire le cœur d'AngularDart from scratch
+3. S'assurer que tous les tests passent pour garantir le côté iso-fonctionnel des deux versions
+
+Cela permet notamment deux choses : 
+* Ne pas reproduire les erreurs que l'on a pu faire dans la première écriture du framework. En effet, soyons honnête, toute personne réécrivant un algorithme déjà écrit le réécrira plus vite et avec une meilleure qualité.
+* Profiter des possibilités offertes par Dart
+
+### Les annotations
+
+Un des exemples les plus flagrants concernant l'utilisation d'une possibilité offerte par Dart est, sans conteste, l'utilisation d'annotations absentes en JavaScript.
+Les annotations permettent à AngularDart de standardiser au maximum les APIs afin de simplifier l'utilisation et la prise en main du framework sous Dart.
+Un exemple d'utilisation serait de déclarer un service devant être injectable dans l'application, pour cela il suffit d'annoter la classe avec `@Injectable` et le tour est joué : 
+```Dart
+@Injectable()
+class Contacts {
+  List<Contact> contacts = [ new Contact(...), new Contact()];
+}
+
+``` 
+
+
+### Une nouvelle injection de dépendance
+Tout développeur ayant utilisé AngularJS sait qu'une partie de la puissance d'Angular provient de son injection de dépendances (DI: dependency injection). 
+
+Cependant, la DI de la version JavaScript présente un inconvénient majeur, elle est basé sur des chaînes de caractères et peut donc poser de nombreux problèmes lors des étapes de minifications aujourd'hui répandues pour la distribution d'une application web.
+Le nouveau né de la famille Angular ne reproduira pas l'erreur de son parent et se base désormais sur les types pour l'injection de dépendances.
+
+En reprenant le service précédemment déclaré, on peut facilement l'injecter dans le constructeur pour le rendre accessible : 
+```Dart
+@Component(...)
+class VCardList  {
+  Contacts contactsSvc;
+  List<Contact> contacts;
+ 
+  VCardList(this.contactsSvc) {
+    contacts = contactsSvc.contacts;
+  }
+}
+
+```
 
