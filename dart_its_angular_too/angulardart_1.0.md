@@ -52,9 +52,9 @@ class Contacts {
 
 
 ### Une nouvelle injection de dépendance
-Tout développeur ayant utilisé AngularJS sait qu'une partie de la puissance d'Angular provient de son injection de dépendances (DI: dependency injection). 
+Tout développeur ayant utilisé AngularJS sait qu'une partie de la puissance d'Angular provient de son injection de dépendances. 
 
-Cependant, la DI de la version JavaScript présente un inconvénient majeur, elle est basé sur des chaînes de caractères et peut donc poser de nombreux problèmes lors des étapes de minifications aujourd'hui répandues pour la distribution d'une application web.
+Cependant, l'injection de dépendances de la version JavaScript présente un inconvénient majeur, elle est basé sur des chaînes de caractères et peut donc poser de nombreux problèmes lors des étapes de minifications aujourd'hui répandues pour la distribution d'une application web.
 Le nouveau né de la famille Angular ne reproduira pas l'erreur de son parent et se base désormais sur les types pour l'injection de dépendances.
 
 En reprenant le service précédemment déclaré, on peut facilement l'injecter dans le constructeur pour le rendre accessible et ainsi récupérer la liste des contacts: 
@@ -191,7 +191,7 @@ Dans le cas où le support d'Internet Explorer 9 serait requis, il sera nécessa
 
 ### Plus de Filters mais des Formatters
 
-La documentation officiel d'AngularJS indique qu'un filtre sert à formatter le résultat d'une expression à des fins d'affichages (["A filter formats the value of an expression for display to the user"](https://docs.angularjs.org/guide/filter)). Cette définition pour le moins explicite permet de comprendre la raison de ce renommage de `Filter` à `Formatter`. La collision de nommage entre les `filters` et le filtre `filter` peut aussi être vu comme une autre raison permettant d'expliquer cette décision.
+La documentation officiel d'AngularJS indique qu'un filtre sert à formater le résultat d'une expression à des fins d'affichages (["A filter formats the value of an expression for display to the user"](https://docs.angularjs.org/guide/filter)). Cette définition pour le moins explicite permet de comprendre la raison de ce renommage de `Filter` à `Formatter`. La collision de nommage entre les `filters` et le filtre `filter` peut aussi être vu comme une autre raison permettant d'expliquer cette décision.
 
 La déclaration d'un formatter se fait par l'utilisation d'un "callable object" déclaré de la manière suivante : 
 ```Dart
@@ -209,7 +209,7 @@ class SearchFilter {
   }
 }
 ```
-On peut ainsi noter que contrairement aux décorateurs et composants la déclaration d'un formatter n'utilise pas de `selector` mais un `name` car le formatter n'a pas vocation à apparaître dans l'arbre DOM pour activer un quelconque comportement. Le `Formatter` est une fonction qui sera appelée pour formatter des données lors de l'affichage.
+On peut ainsi noter que contrairement aux décorateurs et composants la déclaration d'un formatter n'utilise pas de `selector` mais un `name` car le formatter n'a pas vocation à apparaître dans l'arbre DOM pour activer un quelconque comportement. Le `Formatter` est une fonction qui sera appelée pour formater des données lors de l'affichage.
 
 ## Zones : la fin du $apply
 
@@ -249,7 +249,7 @@ Grâce au fonctionnement des zones, nous n'avons pas besoin dans la version Dart
 
 ## Conclusion 
 
-Pour résumer, AngularDart prend le parti de s'éloigner de son parent AngularJS afin d'essayer d'uniformiser les APIs et de se rapporcher des nouveaux standards web.
+Pour résumer, AngularDart prend le parti de s'éloigner de son parent AngularJS afin d'essayer d'uniformiser les APIs et de se rapprocher des nouveaux standards web.
 
 Mon avis est aussi que les développeurs habitués au back-end seront très vite opérationnel via l'utilisation de classes, d'une injection de dépendances basée sur les types et l'utilisation d'annotations.
 
