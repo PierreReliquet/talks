@@ -138,11 +138,62 @@ On peut donc constater :
 * qu'un décorateur est aussi caractérisé par un attribut `selector` qui est un sélecteur CSS indiquant la condition d'activation de celui-ci, dans notre cas nous indiquons que le tooltip sera actif pour tous les éléments possédant l'attribut `tooltip`. 
 * qu'il est possible de récupérer des variables du scope englobant via des annotations `@NgOneWay`, `@NgTwoWay` ou encore par l'attribut [map](https://docs.angulardart.org/#angular/angular-core-annotation.Directive@id_map) de la meta-information `@Decorator`.
 
+#### Component
+
+Les `Components` sont la brique servant à étendre le HTML, il n'est désormais plus nécessaire de se rappeler quelles sont les valeurs possibles pour l'attribut `restrict` d'une directive AngularJS, les composants sont limités aux éléments ('E'). 
+
+Comme je l'ai indiqué précédemment, un des objectifs d'AngularDart est d'uniformiser les APIs pour cela nous allons retrouver pour les `Components` l'utilisation des annotations comme précédemment pour les `Decorators`.
+
+La déclaration d'un composant se fait de la manière suivante : 
+```Dart
+@Component(
+    selector: 'vcard',
+    templateUrl: 'components/vcard/vcard_component.html',
+    cssUrl: 'components/vcard/vcard_component.css',
+    publishAs: 'vcard',
+    map: const {
+      'contact': '<=>contact'
+    }
+)
+class VCard implements ScopeAware {
+  Scope scope;
+  Contact contact;
+}
+```
+On peut constater la présence d'un certains nombre de paramètres : 
+* `selector` le sélecteur CSS indiquant que le tag créé s'appellera vcard
+* `templateUrl` l'URL du template correspondant au composant
+* `cssUrl` l'URL du fichier CSS appliqué à l'élément
+* `publishAs` le nom sous lequel le composant sera publié dans son template
+* `map` définit comment les variables seront "bindées" entre le composant vcard et le composant englobant.
+
+Attention, depuis la version 1.0 les URL `templateUrl` et `cssUrl` prennent en paramètre des chemins relatifs par rapport à la librairie déclarant les composants.
+
+Une fois le composant définit, il reste à déclarer le template pour cela rien de spécifique juste un simple template HTML : 
+```HTML
+<div class="contact-card">
+  <div class="contact-card-inner">
+    <h4>{{vcard.contact.firstName}} {{vcard.contact.lastName | uppercase}}</h4>
+
+    <div class="contact-address">{{vcard.contact.address}}</div>
+    <div class="contact-phone">{{vcard.contact.phone}}</div>
+  </div>
+</div>
+```
+
+Voilà, notre premier composant est défini et nous n'avons plus qu'à l'utiliser : 
+
+```HTML
+<vcard contact="contact" class="span4" ng-repeat="contact in vcardList.contacts"></vcard>
+```
+
+Une fois utilisé ce composant va se baser sur le shadow DOM et, par conséquent, dans les DevTools de notre navigateur nous ne que l'élément `vcard` comme s'il faisait partie du standard HTML et nous ne verrons nullement l'imbrication de `div` définit dans notre template. Cela s'oppose à AngularJS qui fonctionnerait par insertion du template au sein de notre `vcard`.
+
+Dans le cas où le support d'Internet Explorer 9 serait requis, il sera nécessaire de désactiver l'utilisation du shadow DOM avec la propriété `useShadowDom = false` au sein de la déclaration du `@Component`.
+
 ### Plus de Filters mais des Formatters
 
-Pourquoi tout renommer ? 
-
-D'après la documentation officiel d'AngularJS, un filtre sert à formatter le résultat d'une expression à des fins d'affichages (["A filter formats the value of an expression for display to the user"](https://docs.angularjs.org/guide/filter)). Cette définition pour le moins explicite permet de comprendre la raison de ce renommage de `Filter` à `Formatter`. La collision de nommage entre les `filters` et le filtre `filter` peut éventuellement être vu comme une autre raison permettant d'expliquer cette décision.
+La documentation officiel d'AngularJS indique qu'un filtre sert à formatter le résultat d'une expression à des fins d'affichages (["A filter formats the value of an expression for display to the user"](https://docs.angularjs.org/guide/filter)). Cette définition pour le moins explicite permet de comprendre la raison de ce renommage de `Filter` à `Formatter`. La collision de nommage entre les `filters` et le filtre `filter` peut aussi être vu comme une autre raison permettant d'expliquer cette décision.
 
 La déclaration d'un formatter se fait par l'utilisation d'un "callable object" déclaré de la manière suivante : 
 ```Dart
@@ -161,3 +212,39 @@ class SearchFilter {
 }
 ```
 On peut ainsi noter que contrairement aux décorateurs et composants la déclaration d'un formatter n'utilise pas de `selector` mais un `name` car le formatter n'a pas vocation à apparaître dans l'arbre DOM pour activer un quelconque comportement. Le `Formatter` est une fonction qui sera appelée pour formatter des données lors de l'affichage.
+
+## Zones : la fin du $apply
+
+Une zone est un concept propre à Dart défini comme l'étendue d'un appel de méthode incluant les exécutions synchrones et asynchrones - "A zone represents the asynchronous dynamic extent of a call". L'intérêt d'un tel concept est que tout appel de méthode se retrouve encapsulé dans une zone et cela va permettre d'annihiler le besoin d'utiliser `$scope.$apply` même lorsque l'on intègre une librairie externe.
+
+```JavaScript
+controller("FooCtrl", function($scope){
+  $scope.square = 2;
+
+  setInterval(function(){
+    $scope.$apply(function(){
+      $scope.square = $scope.square * $scope.square;
+    });
+  }, 2500);
+})
+```
+
+Sur ce bout de code JavaScript, on peut constater qu'il est nécessaire d'encapsuler le code situé à l'intérieur du setInterval dans un $scope.$apply. En effet, la fonction native setInterval va être déclenchée hors du scope d'Angular et le système de binding ne sera donc pas alerté qu'une modification du modèle a eu lieu. Pour cette raison, nous utilisons le $scope.$apply pour être sûr qu'Angular sera bien informé de la mise à jour de la valeur et mettra à jour l'UI en conséquence.
+
+La version Dart maintenant entraîne quelques changements, tout d'abord nous passons d'un contrôleur à un composant mais la logique reste la même : 
+```Dart
+@Component(
+    selector: "square",
+    template: '{{square}}'
+)
+class Square {
+  num square = 0;
+
+  Count(){
+    new Timer.periodic(new Duration(seconds: 1), (_) { 
+      square = square * square
+    });
+  }
+}
+```
+Grâce au fonctionnement des zones, nous n'avons pas besoin dans la version Dart de nous poser la question : "est-ce que la modification a eu lieu au sein du scope d'Angular ou non ?", les zones garantissent qu'à la fin de l'exécution d'une méthode le $digest sera déclenché et la vue sera bien rafraichie.
