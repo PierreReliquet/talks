@@ -171,10 +171,10 @@ Une fois le composant définit, il reste à déclarer le template pour cela rien
 ```HTML
 <div class="contact-card">
   <div class="contact-card-inner">
-    <h4>{{vcard.contact.firstName}} {{vcard.contact.lastName | uppercase}}</h4>
+    <h4>{{contact.firstName}} {{contact.lastName | uppercase}}</h4>
 
-    <div class="contact-address">{{vcard.contact.address}}</div>
-    <div class="contact-phone">{{vcard.contact.phone}}</div>
+    <div class="contact-address">{{contact.address}}</div>
+    <div class="contact-phone">{{contact.phone}}</div>
   </div>
 </div>
 ```
@@ -182,7 +182,7 @@ Une fois le composant définit, il reste à déclarer le template pour cela rien
 Voilà, notre premier composant est défini et nous n'avons plus qu'à l'utiliser : 
 
 ```HTML
-<vcard contact="contact" class="span4" ng-repeat="contact in vcardList.contacts"></vcard>
+<vcard contact="contact" class="span4" ng-repeat="contact in contacts"></vcard>
 ```
 
 Une fois utilisé ce composant va se baser sur le shadow DOM et, par conséquent, dans les DevTools de notre navigateur nous ne que l'élément `vcard` comme s'il faisait partie du standard HTML et nous ne verrons nullement l'imbrication de `div` définit dans notre template. Cela s'oppose à AngularJS qui fonctionnerait par insertion du template au sein de notre `vcard`.
@@ -246,3 +246,11 @@ class Square {
 }
 ```
 Grâce au fonctionnement des zones, nous n'avons pas besoin dans la version Dart de nous poser la question : "est-ce que la modification a eu lieu au sein du scope d'Angular ou non ?", les zones garantissent qu'à la fin de l'exécution d'une méthode le $digest sera déclenché et la vue sera bien rafraichie.
+
+## Conclusion 
+
+Pour résumer, AngularDart prend le parti de s'éloigner de son parent AngularJS afin d'essayer d'uniformiser les APIs et de se rapporcher des nouveaux standards web.
+
+Mon avis est aussi que les développeurs habitués au back-end seront très vite opérationnel via l'utilisation de classes, d'une injection de dépendances basée sur les types et l'utilisation d'annotations.
+
+Enfin, AngularDart nous simplifie la vie par l'utilisation des zones afin d'éviter d'avoir à se soucier des $apply. Cela a, cependant, un coût, la suppression des controllers nous amène à ré-imaginer la structuration de nos applications web se basant sur un sous-ensemble des web-components, travail que certains auront déjà réalisé via l'utilisation de polymer.
