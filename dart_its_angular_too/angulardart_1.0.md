@@ -150,7 +150,6 @@ La déclaration d'un composant se fait de la manière suivante :
     selector: 'vcard',
     templateUrl: 'components/vcard/vcard_component.html',
     cssUrl: 'components/vcard/vcard_component.css',
-    publishAs: 'vcard',
     map: const {
       'contact': '<=>contact'
     }
@@ -164,7 +163,6 @@ On peut constater la présence d'un certains nombre de paramètres :
 * `selector` le sélecteur CSS indiquant que le tag créé s'appellera vcard
 * `templateUrl` l'URL du template correspondant au composant
 * `cssUrl` l'URL du fichier CSS appliqué à l'élément
-* `publishAs` le nom sous lequel le composant sera publié dans son template
 * `map` définit comment les variables seront "bindées" entre le composant vcard et le composant englobant.
 
 Attention, depuis la version 1.0 les URL `templateUrl` et `cssUrl` prennent en paramètre des chemins relatifs par rapport à la librairie déclarant les composants.
