@@ -185,7 +185,7 @@ Voilà, notre premier composant est défini et nous n'avons plus qu'à l'utilise
 <vcard contact="contact" class="span4" ng-repeat="contact in contacts"></vcard>
 ```
 
-Une fois utilisé ce composant va se baser sur le shadow DOM et, par conséquent, dans les DevTools de notre navigateur nous ne que l'élément `vcard` comme s'il faisait partie du standard HTML et nous ne verrons nullement l'imbrication de `div` définit dans notre template. Cela s'oppose à AngularJS qui fonctionnerait par insertion du template au sein de notre `vcard`.
+Une fois utilisé ce composant va se baser sur le shadow DOM et, par conséquent, dans les DevTools de notre navigateur nous ne verrons que l'élément `vcard` comme s'il faisait partie du standard HTML et nous ne verrons nullement l'imbrication de `div` définit dans notre template. Cela s'oppose à AngularJS qui fonctionnerait par insertion du template au sein de notre `vcard`.
 
 Dans le cas où le support d'Internet Explorer 9 serait requis, il sera nécessaire de désactiver l'utilisation du shadow DOM avec la propriété `useShadowDom = false` au sein de la déclaration du `@Component`.
 
