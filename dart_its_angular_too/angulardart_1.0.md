@@ -27,7 +27,7 @@ Si je devais résumer AngularDart en une phrase cela serait :
 “Un framework regroupant toute la puissance et la philosophie d’Angular, les derniers standards web et codé avec un *
 langage moderne et structuré fonctionnant sur une VM offrant d’intéressantes possibilités”.
 
-En réalité AngularDart n'est un simple portage mais une `réécriture complète` d'AngularJS dont la méthodologie choisi est la suivante : 
+En réalité AngularDart n'est pas un simple portage mais une `réécriture complète` d'AngularJS dont la méthodologie choisi est la suivante : 
 
 1. Réécrire tous les tests d'AngularJS en Dart
 2. Réécrire le cœur d'AngularDart from scratch
