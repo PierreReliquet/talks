@@ -95,17 +95,15 @@ asyncOp1()
 </figure>
 
 
-## Context
+## The birth
 
-* `Rewriting` of Google internal CRM
-* Project defined as "`widow maker project`" by Seth Ladd
-* Team : Green tea - 12 engineers
-* Legacy : Java / GWT application
-* Decisions made :
- * rewrite `completely` the tool
- * port `Angular` to `Dart`
-
-=> CRM rewritten in 6 months
+* `Enhancing` of Google internal CRM
+* Legacy : `Java` / `GWT` application
+* 12 engineers
+* A "`widow maker project`"
+* Decisions made:
+  * Rewrite the app in Dart
+  * Port `Angular` to `Dart`
 
 
 ## How ?
@@ -258,10 +256,7 @@ The template looks like :
   </div>
 </div>
 ```
-Web components are awesome :
-
-* Already available through `Polymer`
-* No more `CSS leak`
+No more `CSS leak`
 
 
 ## Decorators
@@ -336,17 +331,17 @@ void addressBookRouter(Router router, RouteViewFactory views) {
       view: 'partials/list.html',
       defaultRoute : true),
     'contact': ngRoute(
-          path: '/contact/:id',
-          mount: {
-            'edit': ngRoute(
-                path: '/edit',
-                view: 'partials/edit.html'
-            ),
-            'view': ngRoute(
-                path: '/view',
-                view: 'partials/view.html'
-            )
-          })
+      path: '/contact/:id',
+      mount: {
+        'edit': ngRoute(
+            path: '/edit',
+            viewHtml: '<contact-edit></contact-edit>'
+        ),
+        'view': ngRoute(
+            path: '/view',
+            viewHtml: '<contact-view></contact-view>'
+        )
+      })
   });
 }
 ```
@@ -354,9 +349,9 @@ void addressBookRouter(Router router, RouteViewFactory views) {
 
 ## Angular.dart
 
-* It is a `POC` on many aspects
+* `One` year of development to ship 1.0
 * Used by `Google` in production
-* `Better way` to build web applications
+* `New` but `simpler` way to build web applications
 * Helps to get familiar with the `future`
 
 
@@ -369,7 +364,7 @@ void addressBookRouter(Router router, RouteViewFactory views) {
 ## Angular 2
 
 * Written in `AtScript`
-* Many concepts validated with Angular.dart
+* Angular.dart was a `Proof Of Concept`
  * `Type` based DI
  * `Annotations`
  * `Zones`
@@ -390,7 +385,7 @@ It is all about making the web a better development platform.
 
 
 
-## Thank you! 
+## Thank you!
 
 
 <figure>
