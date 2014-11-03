@@ -129,9 +129,8 @@ asyncOp1()
 * `Annotations`
  * Add meta information to existing class
  * Standardization of declaration
-   * Component, Decorator, Injectable Formatter ...
-* `Web standards` :
- * Web components => Shadow DOM
+   * Component, Decorator, Injectable, Formatter ...
+* `Web standards`
 * [Zones](http://www.youtube.com/watch?v=3IqtmUscE_U)
 
 
@@ -240,7 +239,8 @@ class VCard {
 ```
 Use your component :
 ```Html
-<vcard contact="contact" class="span4" ng-repeat="contact in contactList.contacts"></vcard>
+<vcard contact="contact" class="span4" ng-repeat="contact in contactList.contacts">
+</vcard>
 ```
 
 
@@ -315,10 +315,6 @@ class SearchFilter {
 }
 ```
 
-&#9888; No `selector` but a `name`
-
-&#9888; The method must be named `call`
-
 
 ## Routing is powerful
 
@@ -364,17 +360,34 @@ void addressBookRouter(Router router, RouteViewFactory views) {
 ## Angular 2
 
 * Written in `AtScript`
-* Angular.dart was a `Proof Of Concept`
- * `Type` based DI
+* Angular.dart `proved some concepts`
+ * [Type based DI](https://github.com/angular/di.js)
  * `Annotations`
- * `Zones`
- * `Dirty checking`
+ * [Zones](https://github.com/angular/zone.js)
+ * [Dirty checking](https://github.com/angular/watchtower.js)
 
 
 ## What the heck is AtScript ?
 <figure>
   <img src="img/atscript.png" />
 </figure>
+
+
+## One Component with AtScript
+```
+@Directive({
+  selector: ['[blink]']
+})
+class Blink {
+  constructor(element:Element,
+              options:Options,
+              timeout:Timeout) {
+    var selectors:Array<CssSelectors> = someThirdPartyAPI();
+    element.query(selectors.join(','))
+           .forEach(e => options.apply(e));
+   }
+}
+```
 
 
 `AngularDart` is not about `Dart`.
