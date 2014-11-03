@@ -15,7 +15,7 @@ Consultant [@ZenikaIT](http://zenika.com/)
 
 
 <figure>
-  <img src="img/dart.png" />
+  <a href="http://www.dartlang.org"><img src="img/dart.png" /></a>
 </figure>
 
 
@@ -50,48 +50,19 @@ class Conference {
 ```
 
 
-## "Callback Hell" aka "Pyramid of Doom"
+## Many great things
 
-```Dart
-myapp.asyncOperation1(function(firstData) {
-  // Success
-  myapp.asyncOperation2(firstData, function(secondData) {
-   // Success
-   myapp.asyncOperation3(secondData, function(thirdData) {
-     myapp.treatData(thirdData);
-   }, function(err) {
-     // Error handling
-   });
-  }, function(err) {
-     // Error handling
-  });
-  }, function(err) {
-  // Error Handling
-});
-```
-
-
-## Native Future are great
-
-```Dart
-asyncOp1()
- .then((var firstData) => asyncOp2(firstData))
- .then((var secondData) => asyncOp3(secondData))
- .then((var thirdData) => treatData(thirdData))
- .catchError((e) => print(e));
-```
-
-
-## Many other great things
-
+* dart2js
+* Tree shaking
+* Futures
+* Generics
 * Isolates
 * Deferred loading
-* Tree shaking
 
 
 
 <figure>
-	<img src="img/angulardart.png"/>
+	<a href="http://angulardart.org"><img src="img/angulardart.png"/></a>
 </figure>
 
 
@@ -138,14 +109,15 @@ asyncOp1()
 
 A zone is a "dynamic extent `including asynchronous callbacks` declared in the zone" which means an execution context.
 <figure>
-  <img src="img/zones.png"/>  
+  <a href="http://www.youtube.com/watch?v=RqKUTGB-CxA"><img src="img/zones.png"/></a>
+  <!-- image imported from James deBoer talk at ngConf 2014 -->
 </figure>
 
 Why is that `so great` ?
 
 
 ## Death of $scope.$apply
-```Dart
+```
 _zone.onTurnDone = () {
   _pendingAsync.increaseCount();
   apply();
@@ -157,21 +129,7 @@ _zone.onTurnDone = () {
 
 ## Bootstrapping an application
 
-Include dart file and declare your Angular application :
-
-```HTML
-<html ng-app>
-  <!-- should be script :-) -->
-  <sript src="packages/shadow_dom/shadow_dom.min.js"></sript>
-  <sript type="application/dart" src="addressbook.dart"></sript>
-  <sript src="packages/browser/dart.js"></sript>
-</html>
 ```
-
-
-## Bootstrapping an application
-
-```Dart
 class AddressBook extends Module {
   AddressBook() {
     bind(Contacts);
@@ -190,38 +148,23 @@ main() {
 ```
 
 
-## Services
+## Controllers & scopes
 
-Creating a service :
-```Dart
-@Injectable()
-class Contacts {
-  List<Contact> contacts = [ new Contact(...), new Contact(...)];
-}
-```
-Use it through DI :
-```Dart
-@Component(/* ... */)
-class VCardList {
-  Contacts contactsSvc;
-  List<Contact> contacts;
-
-  VCardList(this.contactsSvc) {
-    contacts = contactsSvc.contacts;
-  }
-}
-```
+<figure>
+  <a href="http://www.youtube.com/watch?v=gNmWybAyBHI"><img src="img/RIP_controllers_scope.png"></a>
+  <!-- image adapted from angular 2.0 core at ngEurope 2014-->
+</figure>
 
 
 ## Directives
 
 * Directives have been splitted into :
- * Decorator
-   * Add behaviour to `existing` HTML element
  * Component
    * Create custom HTML element
    * Subset of web components
    * Create a new `context`
+ * Decorator
+   * Add behaviour to `existing` HTML element
 
 
 ## Components
@@ -239,7 +182,8 @@ class VCard {
 ```
 Use your component :
 ```Html
-<vcard contact="contact" class="span4" ng-repeat="contact in contactList.contacts">
+<vcard contact="contact" class="span4"
+  ng-repeat="contact in contactList.contacts">
 </vcard>
 ```
 
@@ -289,6 +233,29 @@ class Tooltip {
         tooltip.remove();
       }
     });
+  }
+}
+```
+
+
+## Services
+
+Creating a service :
+```
+@Injectable()
+class Contacts {
+  List<Contact> contacts = [ new Contact(...), new Contact(...)];
+}
+```
+Use it through DI :
+```
+@Component(/* ... */)
+class VCardList {
+  Contacts contactsSvc;
+  List<Contact> contacts;
+
+  VCardList(this.contactsSvc) {
+    contacts = contactsSvc.contacts;
   }
 }
 ```
@@ -359,7 +326,7 @@ void addressBookRouter(Router router, RouteViewFactory views) {
 
 ## Angular 2
 
-* Written in `AtScript`
+* Written in [AtScript](http://www.youtube.com/watch?v=lGdnh8QSPPk)
 * Angular.dart `proved some concepts`
  * [Type based DI](https://github.com/angular/di.js)
  * `Annotations`
@@ -367,24 +334,50 @@ void addressBookRouter(Router router, RouteViewFactory views) {
  * [Dirty checking](https://github.com/angular/watchtower.js)
 
 
+## A new templating syntax
+
+```Html
+<vcard class="span4" <!-- a web component -->
+  [contact]="contact" <!-- bound to the vcard contact property -->
+  [ng-repeat|contact]="contacts" <!-- only expressions are quoted -->
+  (click)="goTo()"> <!-- bound to the on click event -->
+</vcard>
+```
+* `Native` integration with `web-components`
+* Enable `static analysis`
+
+
+## A serial killer
+
+* Controllers
+* $scope
+* Directive Definition Object
+* `jqLite`
+* `angular.module`
+
+
 ## What the heck is AtScript ?
 <figure>
-  <img src="img/atscript.png" />
+  <a href="http://www.youtube.com/watch?v=lGdnh8QSPPk"><img src="img/atscript.png" /></a>
+  <!-- image downloaded from Misko Hevery's talk at ngEurope 2014-->
 </figure>
+`It is not a new language`
 
 
-## One Component with AtScript
+## An .ats snippet
 ```
-@Directive({
-  selector: ['[blink]']
+@DecoratorDirective({
+  selector: ['[tooltip]']
 })
-class Blink {
+class Tooltip {
+
   constructor(element:Element,
-              options:Options,
-              timeout:Timeout) {
-    var selectors:Array<CssSelectors> = someThirdPartyAPI();
-    element.query(selectors.join(','))
-           .forEach(e => options.apply(e));
+              contact:Contact) {
+    this.elm = element;
+    this.contact = contact;
+    this.elm.addEventListener('mouseenter', function(e: MouseEvent) {
+      ...
+    });
    }
 }
 ```

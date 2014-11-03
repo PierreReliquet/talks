@@ -17,20 +17,24 @@ body {
 
 .reveal .controls div.navigate-left,
 .reveal .controls div.navigate-left.enabled {
-  border-right-color: rgb(148,39,35); 
+  border-right-color: rgb(148,39,35);
 }
 
 .reveal .controls div.navigate-right,
 .reveal .controls div.navigate-right.enabled {
-  border-left-color: rgb(148,39,35); 
+  border-left-color: rgb(148,39,35);
 }
 
 .reveal .controls div.navigate-up,
 .reveal .controls div.navigate-up.enabled {
-  border-bottom-color: rgb(148,39,35); 
+  border-bottom-color: rgb(148,39,35);
 }
 
 .reveal .controls div.navigate-down,
 .reveal .controls div.navigate-down.enabled {
-  border-top-color: rgb(148,39,35); 
+  border-top-color: rgb(148,39,35);
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  margin: 0 0 30px 0;
 }
