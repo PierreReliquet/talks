@@ -36,7 +36,7 @@ Consultant [@ZenikaIT](http://zenika.com/)
 ## It is familiar
 
 ```Dart
-@Injectable
+@Injectable()
 class Conference {
   List<Attendee> attendees = []; // var attendees = [];
 
