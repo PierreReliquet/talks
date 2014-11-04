@@ -183,7 +183,7 @@ class VCard {
 Use your component :
 ```Html
 <vcard contact="contact" class="span4"
-  ng-repeat="contact in contactList.contacts">
+  ng-repeat="contact in contacts">
 </vcard>
 ```
 
