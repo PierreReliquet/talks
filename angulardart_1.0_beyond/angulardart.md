@@ -4,6 +4,7 @@
 
 Consultant [@ZenikaIT](http://zenika.com/)
 
+Slides at : [goo.gl/PdZMUV](http://goo.gl/PdZMUV)
 
 
 ## Agenda
