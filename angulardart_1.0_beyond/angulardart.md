@@ -361,7 +361,6 @@ void addressBookRouter(Router router, RouteViewFactory views) {
   <a href="http://www.youtube.com/watch?v=lGdnh8QSPPk"><img src="img/atscript.png" /></a>
   <!-- image downloaded from Misko Hevery's talk at ngEurope 2014-->
 </figure>
-`It is not a new language`
 
 
 ## An .ats snippet
@@ -381,6 +380,14 @@ class Tooltip {
    }
 }
 ```
+
+
+### Angular `two` is Angular `too`
+
+* Change detection
+* Dependency Injection
+* DOM Extension
+
 
 
 `AngularDart` is not about `Dart`.
