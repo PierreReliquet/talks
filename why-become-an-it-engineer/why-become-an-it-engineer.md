@@ -49,8 +49,12 @@ Rogers' adoption curve
 </figure>
 
 
-### Experience `does not` matter
+### But experience `does not` matter
 
 <figure>
   <img src="img/conference.jpg" />
 </figure>
+
+
+
+## The `end`
